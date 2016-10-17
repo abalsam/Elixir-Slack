@@ -14,7 +14,10 @@ defmodule Slack.Bot do
           initial_state: initial_state
         }
         url = String.to_char_list(rtm.url)
-        client.start_link(url, __MODULE__, state)
+        # client.start_link(url, __MODULE__, state)
+        # make websockets timeout after 30 seconds
+        client.start_link(url, __MODULE__, state, [keepalive: 30000]) 
+
       {:error, %HTTPoison.Error{reason: :connect_timeout}} ->
         {:error, "Timed out while connecting to the Slack RTM API"}
       {:error, %HTTPoison.Error{reason: :nxdomain}} ->
